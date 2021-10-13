@@ -1,1 +1,38 @@
-Hello World
+<head>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="https://api.trello.com/1/client.js?key={d0c2d4ce6c3aceca07ebfe61196af877}"></script>
+</head>>
+
+<body>
+    <script>
+       var authenticationSuccess = function() { console.log('Successful authentication'); };
+       var authenticationFailure = function() { console.log('Failed authentication'); };
+ 
+        Trello.authorize({
+            type: 'popup',
+            name: 'Getting Started Application',
+            scope: {
+            read: true,
+            write: true },
+            expiration: 'never',
+            success: authenticationSuccess,
+            error: authenticationFailure
+        });
+    
+        var myList = 'my list';
+        var creationSuccess = function(data) {
+            console.log('Card created successfully. Data returned:' +   
+            JSON.stringify(data));
+        };
+        var newCard = {
+            name: 'New Test Card', 
+            desc: 'This is the description of our new card.',
+            idList: myList,
+            pos: 'top'
+            };
+        Trello.post("cards", newCard, creationSuccess);
+   </script>
+</body>

@@ -22,17 +22,17 @@
             error: authenticationFailure
         });
     
-        var myList = 'my list';
+        var myList = '612d766ffee08c6c66136ccf';
         var creationSuccess = function(data) {
             console.log('Card created successfully. Data returned:' +   
             JSON.stringify(data));
         };
         var newCard = {
             name: 'New Test Card', 
-            desc: 'This is the description of our new card.',
+            desc: 'This card was auto-generated using Trello API',
             idList: myList,
             pos: 'top'
             };
-        Trello.post("cards", newCard, creationSuccess);
+        Trello.post('/cards/', newCard, creationSuccess);
    </script>
 </body>

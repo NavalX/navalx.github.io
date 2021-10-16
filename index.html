@@ -11,7 +11,7 @@
        var authenticationSuccess = function() { console.log('Successful authentication'); };
        var authenticationFailure = function() { console.log('Failed authentication'); };
  
-        Trello.authorize({
+        window.Trello.authorize({
             type: 'popup',
             name: 'Getting Started Application',
             scope: {
@@ -33,6 +33,6 @@
             idList: myList,
             pos: 'top'
             };
-        window.Trello.post('/c/', newCard, creationSuccess);
+        window.Trello.post('/cards/', newCard, creationSuccess);
    </script>
 </body>

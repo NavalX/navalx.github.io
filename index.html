@@ -33,6 +33,6 @@
             pos: 'top'
             };
         window.Trello.post('/cards/', newCard, creationSuccess);*/
-        Trello.get('/cards/', retrievalSuccess);
+        Trello.cards.get(myList, retrievalSuccess);
    </script>
 </body>

@@ -23,9 +23,8 @@
         });
     
         var myList = '612d766ffee08c6c66136ccf';
-        var creationSuccess = function(data) {
-            console.log('Card created successfully. Data returned:' +   
-            JSON.stringify(data));
+        var retrievalSuccess = function(data) {
+            console.log('Data returned:' +  JSON.stringify(data));
         };
         /*var newCard = {
             name: 'New Test Card', 
@@ -34,5 +33,6 @@
             pos: 'top'
             };
         window.Trello.post('/cards/', newCard, creationSuccess);*/
+        Trello.get('/cards/', retrievalSuccess);
    </script>
 </body>

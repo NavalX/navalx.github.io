@@ -21,9 +21,8 @@
             success: authenticationSuccess,
             error: authenticationFailure
         });
-    
+        console.log('Data returned:' +  JSON.stringify(data));
         var myList = '612d766ffee08c6c66136ccf';
-        var myBoard = '612d7664a3f3c33dbd1ba6bb';
         var retrievalSuccess = function(data) {
             console.log('Data returned:' +  JSON.stringify(data));
         };
@@ -34,7 +33,6 @@
             pos: 'top'
             };
         window.Trello.post('/cards/', newCard, creationSuccess);*/
-        Trello.lists.get(myBoard, retrievalSuccess);
         Trello.cards.get(myList, retrievalSuccess);
    </script>
 </body>

@@ -22,17 +22,18 @@
             error: authenticationFailure
         });
     
-        var myList = '612d766ffee08c6c66136ccf';
+        var myList = '612d766ffee08c6c66136ccf'; //The Backlog
         var retrievalSuccess = function(data) {
             console.log('Data returned:' +  JSON.stringify(data));
         };
+        // This works for creating a new card in the list
         /*var newCard = {
             name: 'New Test Card', 
             desc: 'This card was auto-generated using Trello API',
             idList: myList,
             pos: 'top'
             };
-        window.Trello.post('/cards/', newCard, creationSuccess);*/
+        window.Trello.post('/cards/', newCard, retrievalSuccess);*/
         Trello.cards.get(myList, retrievalSuccess);
    </script>
 </body>

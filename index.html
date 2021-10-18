@@ -22,19 +22,23 @@
             error: authenticationFailure
         });
     
+        //Trello.get('/b/iCZSbvpA', retrievalSuccess); //Retrieves board information
+        Trello.get('/b/iCZSbvpA/lists/612d766ffee08c6c66136ccf', retrievalSuccess);
+   </script>
+</body>
+
+<!-- Using this section for code that worked but was not what we were looking for -->
+<!-- 
         var myList = '612d766ffee08c6c66136ccf'; //The Backlog
-        var myBoard = '612d7664a3f3c33dbd1ba6bb'; //Digital Agility Board
         var retrievalSuccess = function(data) {
             console.log('Data returned:' +  JSON.stringify(data));
         };
-        // This works for creating a new card in the list
-        /*var newCard = {
+
+        var newCard = {
             name: 'New Test Card', 
             desc: 'This card was auto-generated using Trello API',
             idList: myList,
             pos: 'top'
             };
-        window.Trello.post('/cards/', newCard, retrievalSuccess);*/
-        Trello.get('/b/iCZSbvpA', retrievalSuccess);
-   </script>
-</body>
+        window.Trello.post('/cards/', newCard, retrievalSuccess);
+-->

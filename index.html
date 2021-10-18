@@ -23,6 +23,7 @@
         });
     
         var myList = '612d766ffee08c6c66136ccf'; //The Backlog
+        var myBoard = '612d7664a3f3c33dbd1ba6bb'; //Digital Agility Board
         var retrievalSuccess = function(data) {
             console.log('Data returned:' +  JSON.stringify(data));
         };
@@ -34,6 +35,6 @@
             pos: 'top'
             };
         window.Trello.post('/cards/', newCard, retrievalSuccess);*/
-        Trello.get('/boards/' + myList + '/cards', retrievalSuccess);
+        Trello.get('/boards/' + myBoard, retrievalSuccess);
    </script>
 </body>

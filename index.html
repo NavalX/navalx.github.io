@@ -21,12 +21,11 @@
             success: authenticationSuccess,
             error: authenticationFailure
         });
-
+    
         var retrievalSuccess = function(data) {
             console.log('Data returned:' +  JSON.stringify(data));
         };
-    
-        Trello.get('/b/iCZSbvpA', retrievalSuccess); //This is the board short ID (url)
+        Trello.get('/b/iCZSbvpA', retrievalSuccess);
    </script>
 </body>
 
@@ -36,12 +35,12 @@
         var retrievalSuccess = function(data) {
             console.log('Data returned:' +  JSON.stringify(data));
         };
-
-        var newCard = {
+        // This works for creating a new card in the list
+        /*var newCard = {
             name: 'New Test Card', 
             desc: 'This card was auto-generated using Trello API',
             idList: myList,
             pos: 'top'
             };
-        window.Trello.post('/cards/', newCard, retrievalSuccess);
+        window.Trello.post('/cards/', newCard, retrievalSuccess);*/
 -->

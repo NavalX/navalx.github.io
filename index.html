@@ -21,6 +21,10 @@
             success: authenticationSuccess,
             error: authenticationFailure
         });
+
+        var retrievalSuccess = function(data) {
+            console.log('Data returned:' +  JSON.stringify(data));
+        };
     
         Trello.get('/b/iCZSbvpA', retrievalSuccess); //This is the board short ID (url)
    </script>

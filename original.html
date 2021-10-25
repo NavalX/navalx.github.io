@@ -1,0 +1,40 @@
+<head>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="https://api.trello.com/1/client.js?key=d0c2d4ce6c3aceca07ebfe61196af877"></script>
+</head>>
+
+<body>
+    <script>
+       var authenticationSuccess = function() { console.log('Successful authentication'); };
+       var authenticationFailure = function() { console.log('Failed authentication'); };
+ 
+        window.Trello.authorize({
+            type: 'popup',
+            name: 'Getting Started Application',
+            scope: {
+            read: true,
+            write: true },
+            expiration: 'never',
+            success: authenticationSuccess,
+            error: authenticationFailure
+        });
+    
+        var myList = '612d766ffee08c6c66136ccf'; //The Backlog
+        var myBoard = '612d7664a3f3c33dbd1ba6bb'; //Digital Agility Board
+        var retrievalSuccess = function(data) {
+            console.log('Data returned:' +  JSON.stringify(data));
+        };
+        // This works for creating a new card in the list
+        /*var newCard = {
+            name: 'New Test Card', 
+            desc: 'This card was auto-generated using Trello API',
+            idList: myList,
+            pos: 'top'
+            };
+        window.Trello.post('/cards/', newCard, retrievalSuccess);*/
+        Trello.get('/b/iCZSbvpA', retrievalSuccess);
+   </script>
+</body>

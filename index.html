@@ -257,7 +257,7 @@ header, #tool_pane, #status_pane {
         };
         const loadCards = (id) => {
             //MC edit the below to fit with cards
-            Trello.get('members/me/boards/lists', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
+            Trello.get('members/me/lists', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
         }
         const btnLoadCards = document.getElementById('btn_load_cards');
         btnLoadCards.addEventListener('click', loadCards);

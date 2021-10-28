@@ -68,7 +68,7 @@ header, #tool_pane, #status_pane {
             <div id="user_info"></div>
             <div id="tool_boards" style="display:none">
                 <button id="btn_load_boards">Load Boards</button>
-                <button id="btn_board_audit">Audit Loaded Boards</button>
+                <button id="btn_load_cards">Load Cards</button>
 
                 <table>
                     <thead>
@@ -79,6 +79,18 @@ header, #tool_pane, #status_pane {
                         </tr>
                     </thead>
                     <tbody id="tbl_body_boards">
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl_body_cards">
                     </tbody>
                 </table>
 
@@ -208,11 +220,50 @@ header, #tool_pane, #status_pane {
         };
         const loadBoards = (id) => {
             Trello.get('members/me/boards', { "fields": "id,name,url", "lists": "open" }, showBoards, showError);
-            Trello.cards.get('members/me/boards', { "fields": "id,name,url", "lists": "open" }, showBoards, showError);
         }
         const btnLoadBoards = document.getElementById('btn_load_boards');
         btnLoadBoards.addEventListener('click', loadBoards);
+        //
+        // Cards
+        //
+        const showCards = (results) => {
+            // Should be an array of Trello card objects
+            const curCardTable = document.getElementById('tbl_body_cards');
+            let cardTable = curCardTable.cloneNode(false); // shallow, no children
 
+            results.forEach(card => {
+                const newRow = document.createElement('tr');
+
+                const cellID = document.createElement('td');
+                const cellName = document.createElement('td');
+                const cellURL = document.createElement('td');
+                const cellURLLink = document.createElement('a');
+
+                cellID.textContent = card.id;
+                cellName.textContent  = card.name;
+                cellURLLink.href = card.url;
+                cellURLLink.textContent = card.url;
+                cellURL.appendChild(cellURLLink);
+
+                newRow.appendChild(cellID);
+                newRow.appendChild(cellName);
+                newRow.appendChild(cellURL);
+
+                boardTable.appendChild(newRow);
+            });
+
+            curCardTable.replaceWith(cardTable);
+            updateStatus('Loaded Trello cards.');
+        };
+        const loadCards = (id) => {
+            //MC edit the below to fit with cards
+            Trello.get('members/me/boards', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
+        }
+        const btnLoadCards = document.getElementById('btn_load_cards');
+        btnLoadCards.addEventListener('click', loadCards);
+        //
+        //Create board functionality below
+        //
         const btnCreateBoard = document.getElementById('btn_create_board');
         btnCreateBoard.addEventListener('click', () => {
             if (!window.Trello || !Trello.authorized()) {
@@ -246,18 +297,6 @@ header, #tool_pane, #status_pane {
             showError
             );
         });
-
-        // Searches whether the user identified by user_id is on the board
-        // provided (as an admin)
-        const auditBoard = (board, user_id) => {
-            console.log("Unimplemented.");
-        };
-
-        const btnAuditBoards = document.getElementById('btn_board_audit');
-        btnAuditBoards.addEventListener('click', () => {
-            updateStatus('Board audit not implemented yet.');
-        });
-
     </script>
 </body>
 </html>

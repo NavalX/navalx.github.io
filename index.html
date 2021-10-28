@@ -195,7 +195,7 @@ header, #tool_pane, #status_pane {
             let boardTable = curBoardTable.cloneNode(false); // shallow, no children
 
             results.forEach(board => {
-                Trello.get('members/me/boards/' + board.id + '/cards', { "fields": "id,name,url" }, showCards, showError);
+                Trello.get('members/me/boards/' + board.id + '/cards', showCards, showError);
                 const newRow = document.createElement('tr');
 
                 const cellID = document.createElement('td');

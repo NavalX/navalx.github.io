@@ -195,7 +195,6 @@ header, #tool_pane, #status_pane {
             let boardTable = curBoardTable.cloneNode(false); // shallow, no children
 
             results.forEach(board => {
-                Trello.get('members/me/boards/' + board.id + '/cards?', showCards, showError);
                 const newRow = document.createElement('tr');
 
                 const cellID = document.createElement('td');
@@ -257,7 +256,7 @@ header, #tool_pane, #status_pane {
             updateStatus('Loaded Trello cards.');
         };
         const loadCards = (id) => {
-            Trello.get('members/me/boards', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
+            Trello.get('members/me/cards', showCards, showError);
         }
         const btnLoadCards = document.getElementById('btn_load_cards');
         btnLoadCards.addEventListener('click', loadCards);

@@ -230,7 +230,7 @@ header, #tool_pane, #status_pane {
         const showCards = (results) => {
             // Should be an array of Trello card objects
             const curCardTable = document.getElementById('tbl_body_cards');
-            //let cardTable = curCardTable.cloneNode(false); // shallow, no children
+            let cardTable = curCardTable.cloneNode(true); // shallow, no children
 
             results.forEach(card => {
                 const newRow = document.createElement('tr');
@@ -250,10 +250,10 @@ header, #tool_pane, #status_pane {
                 newRow.appendChild(cellName);
                 newRow.appendChild(cellURL);
 
-                curCardTable.appendChild(newRow);
+                cardTable.appendChild(newRow);
             });
 
-            //curCardTable.replaceWith(cardTable);
+            curCardTable.append(cardTable);
             updateStatus('Loaded Trello cards.');
         };
 

@@ -68,7 +68,6 @@ header, #tool_pane, #status_pane {
             <div id="user_info"></div>
             <div id="tool_boards" style="display:none">
                 <button id="btn_load_boards">Load Boards</button>
-                <button id="btn_load_cards">Load Cards</button>
 
                 <table>
                     <thead>
@@ -79,6 +78,18 @@ header, #tool_pane, #status_pane {
                         </tr>
                     </thead>
                     <tbody id="tbl_body_boards">
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl_body_lists">
                     </tbody>
                 </table>
 
@@ -213,6 +224,7 @@ header, #tool_pane, #status_pane {
                 newRow.appendChild(cellURL);
 
                 boardTable.appendChild(newRow);
+                Trello.get('organizations/' + board.id + '/boards', { "fields": "id,name,url", "lists": "open" }, showLists, showError);
             });
 
             curBoardTable.replaceWith(boardTable);
@@ -224,6 +236,38 @@ header, #tool_pane, #status_pane {
         }
         const btnLoadBoards = document.getElementById('btn_load_boards');
         btnLoadBoards.addEventListener('click', loadBoards);
+        //
+        // Lists
+        //
+        const showLists = (results) => {
+            // Should be an array of Trello board objects
+            const curListTable = document.getElementById('tbl_body_lists');
+            let listTable = curListTable.cloneNode(false); // shallow, no children
+
+            results.forEach(list => {
+                const newRow = document.createElement('tr');
+
+                const cellID = document.createElement('td');
+                const cellName = document.createElement('td');
+                const cellURL = document.createElement('td');
+                const cellURLLink = document.createElement('a');
+
+                cellID.textContent = list.id;
+                cellName.textContent  = list.name;
+                cellURLLink.href = list.url;
+                cellURLLink.textContent = list.url;
+                cellURL.appendChild(cellURLLink);
+
+                newRow.appendChild(cellID);
+                newRow.appendChild(cellName);
+                newRow.appendChild(cellURL);
+
+                listTable.appendChild(newRow);
+            });
+
+            curListTable.replaceWith(listTable);
+            updateStatus('Loaded Trello lists.');
+        };
         //
         // Cards
         //
@@ -257,7 +301,9 @@ header, #tool_pane, #status_pane {
             updateStatus('Loaded Trello cards.');
         };
         const loadCards = (id) => {
-            Trello.get('organizations/612d7568c0288520f659776a/cards', showCards, showError);
+            //Board query works but I get 'unauthorized' message when I try for cards, probably because I need admin rights to the organization
+            Trello.get('members/me/cards', showCards, showError);
+            //Trello.get('organizations/612d7568c0288520f659776a/cards', showCards, showError);
         }
         const btnLoadCards = document.getElementById('btn_load_cards');
         btnLoadCards.addEventListener('click', loadCards);

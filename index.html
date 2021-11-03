@@ -212,7 +212,6 @@ header, #tool_pane, #status_pane {
                 newRow.appendChild(cellURL);
 
                 boardTable.appendChild(newRow);
-                console.log('boards/' + board.id + '/cards');
                 Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
             });
 
@@ -234,6 +233,7 @@ header, #tool_pane, #status_pane {
             let cardTable = curCardTable.cloneNode(false); // shallow, no children
 
             results.forEach(card => {
+                console.log("Added board list");
                 const newRow = document.createElement('tr');
 
                 const cellID = document.createElement('td');
@@ -253,7 +253,7 @@ header, #tool_pane, #status_pane {
 
                 cardTable.appendChild(newRow);
             });
-
+            console.log("completed all boards");
             curCardTable.replaceWith(cardTable);
             updateStatus('Loaded Trello cards.');
         };

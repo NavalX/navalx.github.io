@@ -227,11 +227,11 @@ header, #tool_pane, #status_pane {
         //
         // Cards
         //
+        const curCardTable = document.getElementById('tbl_body_cards');
+        let cardTable = curCardTable.cloneNode(false); // shallow, no children
+
         const showCards = (results) => {
             // Should be an array of Trello card objects
-            const curCardTable = document.getElementById('tbl_body_cards');
-            let cardTable = curCardTable.cloneNode(false); // shallow, no children
-
             results.forEach(card => {
                 const newRow = document.createElement('tr');
 
@@ -251,11 +251,11 @@ header, #tool_pane, #status_pane {
                 newRow.appendChild(cellURL);
 
                 cardTable.appendChild(newRow);
-            });
-
-            curCardTable.replaceWith(cardTable);
-            updateStatus('Loaded Trello cards.');
+            });    
         };
+
+        curCardTable.replaceWith(cardTable);
+        updateStatus('Loaded Trello cards.');
 
         //
         //Create board functionality below

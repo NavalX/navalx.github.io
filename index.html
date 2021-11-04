@@ -217,22 +217,22 @@ header, #tool_pane, #status_pane {
                 boardTable.appendChild(newRow);
                 //Search cards/cardIS/actions to pull up changes in Curl, not sure if it'll work in RestAPI
                 Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url", "lists": "open" }, showError).forEach(card => {
-                    const newRow = document.createElement('tr');
+                    const newRow2 = document.createElement('tr');
 
-                    const cellID = document.createElement('td');
-                    const cellName = document.createElement('td');
-                    const cellURL = document.createElement('td');
-                    const cellURLLink = document.createElement('a');
+                    const cellID2 = document.createElement('td');
+                    const cellName2 = document.createElement('td');
+                    const cellURL2 = document.createElement('td');
+                    const cellURLLink2 = document.createElement('a');
 
-                    cellID.textContent = card.id;
-                    cellName.textContent  = card.name;
-                    cellURLLink.href = card.url;
-                    cellURLLink.textContent = card.url;
-                    cellURL.appendChild(cellURLLink);
+                    cellID2.textContent = card.id;
+                    cellName2.textContent  = card.name;
+                    cellURLLink2.href = card.url;
+                    cellURLLink2.textContent = card.url;
+                    cellURL2.appendChild(cellURLLink);
 
-                    newRow.appendChild(cellID);
-                    newRow.appendChild(cellName);
-                    newRow.appendChild(cellURL);
+                    newRow2.appendChild(cellID);
+                    newRow2.appendChild(cellName);
+                    newRow2.appendChild(cellURL);
 
                     cardTable.appendChild(newRow);
                 });

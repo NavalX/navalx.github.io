@@ -212,7 +212,7 @@ header, #tool_pane, #status_pane {
                 newRow.appendChild(cellURL);
 
                 boardTable.appendChild(newRow);
-                //Search cards/cardIS/actions to pull up changes in Curl, not sure if it'll work in RestAPI
+                //Search 'https://api.trello.com/1/cards/613a333469154a8d30d7a329/actions?' to pull up changes in Curl, not sure if it'll work in RestAPI
                 Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
             });
 

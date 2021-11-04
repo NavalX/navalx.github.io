@@ -221,7 +221,33 @@ header, #tool_pane, #status_pane {
 
             curBoardTable.replaceWith(boardTable);
             updateStatus('Loaded Trello boards.');
-            showCards(idArray);
+
+            const curCardTable = document.getElementById('tbl_body_cards');
+            let cardTable = curCardTable.cloneNode(false); // shallow, no children
+            
+            idArray.forEach(card => {
+                const newRow = document.createElement('tr');
+
+                const cellID = document.createElement('td');
+                const cellName = document.createElement('td');
+                const cellURL = document.createElement('td');
+                const cellURLLink = document.createElement('a');
+
+                cellID.textContent = card.id;
+                cellName.textContent  = card.name;
+                cellURLLink.href = card.url;
+                cellURLLink.textContent = card.url;
+                cellURL.appendChild(cellURLLink);
+
+                newRow.appendChild(cellID);
+                newRow.appendChild(cellName);
+                newRow.appendChild(cellURL);
+
+                cardTable.appendChild(newRow);
+            });
+
+            curCardTable.replaceWith(cardTable);
+            updateStatus('Loaded Trello cards.');
         };
         const loadBoards = (id) => {
             Trello.get('organizations/612d7568c0288520f659776a/boards', { "fields": "id,name,url", "lists": "open" }, showBoards, showError);
@@ -231,7 +257,7 @@ header, #tool_pane, #status_pane {
         //
         // Cards
         //
-        const showCards = (results) => {
+        /*const showCards = (results) => {
             // Should be an array of Trello card objects
             const curCardTable = document.getElementById('tbl_body_cards');
             let cardTable = curCardTable.cloneNode(false); // shallow, no children
@@ -259,7 +285,7 @@ header, #tool_pane, #status_pane {
 
             curCardTable.replaceWith(cardTable);
             updateStatus('Loaded Trello cards.');
-        };
+        };*/
 
         //
         //Create board functionality below

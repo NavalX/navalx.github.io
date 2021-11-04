@@ -192,7 +192,6 @@ header, #tool_pane, #status_pane {
             // Should be an array of Trello board objects
             const curBoardTable = document.getElementById('tbl_body_boards');
             let boardTable = curBoardTable.cloneNode(false); // shallow, no children
-            var idArray = new Array();
 
             results.forEach(board => {
                 const newRow = document.createElement('tr');
@@ -214,40 +213,11 @@ header, #tool_pane, #status_pane {
 
                 boardTable.appendChild(newRow);
                 //Search cards/cardIS/actions to pull up changes in Curl, not sure if it'll work in RestAPI
-                Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url", "lists": "open" }, showError).forEach(card => {
-                    idArray.push(card);
-                });
+                Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
             });
 
             curBoardTable.replaceWith(boardTable);
             updateStatus('Loaded Trello boards.');
-
-            const curCardTable = document.getElementById('tbl_body_cards');
-            let cardTable = curCardTable.cloneNode(false); // shallow, no children
-            
-            idArray.forEach(card => {
-                const newRow = document.createElement('tr');
-
-                const cellID = document.createElement('td');
-                const cellName = document.createElement('td');
-                const cellURL = document.createElement('td');
-                const cellURLLink = document.createElement('a');
-
-                cellID.textContent = card.id;
-                cellName.textContent  = card.name;
-                cellURLLink.href = card.url;
-                cellURLLink.textContent = card.url;
-                cellURL.appendChild(cellURLLink);
-
-                newRow.appendChild(cellID);
-                newRow.appendChild(cellName);
-                newRow.appendChild(cellURL);
-
-                cardTable.appendChild(newRow);
-            });
-
-            curCardTable.replaceWith(cardTable);
-            updateStatus('Loaded Trello cards.');
         };
         const loadBoards = (id) => {
             Trello.get('organizations/612d7568c0288520f659776a/boards', { "fields": "id,name,url", "lists": "open" }, showBoards, showError);
@@ -257,7 +227,7 @@ header, #tool_pane, #status_pane {
         //
         // Cards
         //
-        /*const showCards = (results) => {
+        const showCards = (results) => {
             // Should be an array of Trello card objects
             const curCardTable = document.getElementById('tbl_body_cards');
             let cardTable = curCardTable.cloneNode(false); // shallow, no children
@@ -285,7 +255,7 @@ header, #tool_pane, #status_pane {
 
             curCardTable.replaceWith(cardTable);
             updateStatus('Loaded Trello cards.');
-        };*/
+        };
 
         //
         //Create board functionality below

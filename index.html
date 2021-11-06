@@ -113,12 +113,15 @@ header, #tool_pane, #status_pane {
         const showError = (error) => {
             updateStatus('API call failed');
             console.error(error);
-
+            
+            //Temporarily disabling this so that it doesn't bother me
+            
+            /*
             if (window.Trello && window.Trello.authorized()) {
                 console.log("Deauthorizing token");
                 window.Trello.deauthorize();
                 tryToAuthorize();
-            }
+            }*/
         };
 
         tryToAuthorize = () => {
@@ -213,7 +216,7 @@ header, #tool_pane, #status_pane {
 
                 boardTable.appendChild(newRow);
                 //Search 'https://api.trello.com/1/cards/613a333469154a8d30d7a329/actions?' to pull up changes in Curl, not sure if it'll work in RestAPI
-                Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url", "lists": "open" }, showCards, showError);
+                Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url,idList", "lists": "open" }, showCards, showError);
             });
 
             curBoardTable.replaceWith(boardTable);
@@ -230,32 +233,62 @@ header, #tool_pane, #status_pane {
         const curCardTable = document.getElementById('tbl_body_cards');
         let cardTable = curCardTable.cloneNode(false); // shallow, no children
 
+        var interval = 100; // how much time should the delay between two iterations be (in milliseconds)?
+        var promise = Promise.resolve();
+
         const showCards = (results) => {
             // Should be an array of Trello card objects
             results.forEach(card => {
-                const newRow = document.createElement('tr');
+                promise = promise.then(function () { //Need to delay execution for the Trello call between each iteration of the card loop
+                    const newRow = document.createElement('tr');
+                
+                    const cellID = document.createElement('td');
+                    const cellName = document.createElement('td');
+                    const cellURL = document.createElement('td');
+                    const cellURLLink = document.createElement('a');
 
-                const cellID = document.createElement('td');
-                const cellName = document.createElement('td');
-                const cellURL = document.createElement('td');
-                const cellURLLink = document.createElement('a');
+                    cellID.textContent = card.id;
+                    cellName.textContent  = card.name;
+                    cellURLLink.href = card.url;
+                    cellURLLink.textContent = card.url;
+                    cellURL.appendChild(cellURLLink);
 
-                cellID.textContent = card.id;
-                cellName.textContent  = card.name;
-                cellURLLink.href = card.url;
-                cellURLLink.textContent = card.url;
-                cellURL.appendChild(cellURLLink);
+                    newRow.appendChild(cellID);
+                    newRow.appendChild(cellName);
+                    newRow.appendChild(cellURL);
 
-                newRow.appendChild(cellID);
-                newRow.appendChild(cellName);
-                newRow.appendChild(cellURL);
+                    cardTable.appendChild(newRow);
+                    Trello.get('cards/' + card.id + '/actions', {"fields": "id,name,date", "lists":"open"}, showActions, showError);
 
-                cardTable.appendChild(newRow);
+                    return new Promise(function (resolve) {
+                        setTimeout(resolve, interval);
+                    });
+                });
             });    
         };
 
         curCardTable.replaceWith(cardTable);
         updateStatus('Loaded Trello cards.');
+
+        promise.then(function () {
+            console.log('Loop finished.');
+        });
+
+        //
+        // Actions
+        //
+        const showActions = (results) => {
+            results.forEach(action => {
+                console.log(action.date); //This gets all of the action dates but you hit Trello's API call limit before it finishes
+            });    
+        };
+
+        //Next steps:
+        //1) Create a data structure to hold all of the info you'll need to churn on (likely a stack since values are returned most to least recent) - cardID, date, listName, etc.
+        //2) Perform a comparison on the list data to determine metrics for card age
+
+
+
 
         //
         //Create board functionality below

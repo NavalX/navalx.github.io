@@ -115,13 +115,11 @@ header, #tool_pane, #status_pane {
             console.error(error);
             
             //Temporarily disabling this so that it doesn't bother me
-            
-            /*
-            if (window.Trello && window.Trello.authorized()) {
+            /*if (window.Trello && window.Trello.authorized()) {
                 console.log("Deauthorizing token");
                 window.Trello.deauthorize();
                 tryToAuthorize();
-            }*/
+            };*/
         };
 
         tryToAuthorize = () => {
@@ -215,8 +213,8 @@ header, #tool_pane, #status_pane {
                 newRow.appendChild(cellURL);
 
                 boardTable.appendChild(newRow);
-                //Search 'https://api.trello.com/1/cards/613a333469154a8d30d7a329/actions?' to pull up changes in Curl, not sure if it'll work in RestAPI
-                Trello.get('boards/' + board.id + '/cards', { "fields": "id,name,url,idList", "lists": "open" }, showCards, showError);
+                //Search 'https://api.trello.com/1/cards/617ffdafb19c69039d0015da/actions?' to pull up changes in Curl, not sure if it'll work in RestAPI
+                Trello.get('boards/' + board.id + '/cards', showCards, showError);
             });
 
             curBoardTable.replaceWith(boardTable);
@@ -258,7 +256,7 @@ header, #tool_pane, #status_pane {
                     newRow.appendChild(cellURL);
 
                     cardTable.appendChild(newRow);
-                    Trello.get('cards/' + card.id + '/actions', {"fields": "id,name,date", "lists":"open"}, showActions, showError);
+                    Trello.get('cards/' + card.id + '/actions', showActions, showError);
 
                     return new Promise(function (resolve) {
                         setTimeout(resolve, interval);
@@ -279,13 +277,15 @@ header, #tool_pane, #status_pane {
         //
         const showActions = (results) => {
             results.forEach(action => {
-                console.log(action.date); //This gets all of the action dates but you hit Trello's API call limit before it finishes
+                var obj = new Object();
+                obj = action;
+                console.log(obj.type);
+                console.log(action.data.old.idList);
+                //Need a way to access the 'results' array without having to run it through a method - can't save it as an object, array, or run it through a foreach loop...tried them all
             });    
         };
 
-        //Next steps:
-        //1) Create a data structure to hold all of the info you'll need to churn on (likely a stack since values are returned most to least recent) - cardID, date, listName, etc.
-        //2) Perform a comparison on the list data to determine metrics for card age
+
 
 
 

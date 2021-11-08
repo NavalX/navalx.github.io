@@ -115,11 +115,11 @@ header, #tool_pane, #status_pane {
             console.error(error);
             
             //Temporarily disabling this so that it doesn't bother me
-            /*if (window.Trello && window.Trello.authorized()) {
+            if (window.Trello && window.Trello.authorized()) {
                 console.log("Deauthorizing token");
                 window.Trello.deauthorize();
                 tryToAuthorize();
-            };*/
+            };
         };
 
         tryToAuthorize = () => {
@@ -218,7 +218,7 @@ header, #tool_pane, #status_pane {
             });
 
             curBoardTable.replaceWith(boardTable);
-            updateStatus('Loaded Trello boards.');
+            updateStatus('Loaded boards');
         };
         const loadBoards = (id) => {
             Trello.get('organizations/612d7568c0288520f659776a/boards', { "fields": "id,name,url", "lists": "open" }, showBoards, showError);
@@ -230,8 +230,9 @@ header, #tool_pane, #status_pane {
         //
         const curCardTable = document.getElementById('tbl_body_cards');
         let cardTable = curCardTable.cloneNode(false); // shallow, no children
+        curCardTable.replaceWith(cardTable);
 
-        var interval = 100; // how much time should the delay between two iterations be (in milliseconds)?
+        var interval = 400; // how much time should the delay between two iterations be (in milliseconds)?
         var promise = Promise.resolve();
 
         const showCards = (results) => {
@@ -262,31 +263,44 @@ header, #tool_pane, #status_pane {
                         setTimeout(resolve, interval);
                     });
                 });
-            });    
+            });   
+            updateStatus('Loaded cards');
         };
-
-        curCardTable.replaceWith(cardTable);
-        updateStatus('Loaded Trello cards.');
-
-        promise.then(function () {
-            console.log('Loop finished.');
-        });
 
         //
         // Actions
         //
-        const showActions = (results) => {
+
+        var c = new Object();
+        
+        function showActions (results) {
             results.forEach(action => {
-                var obj = new Object();
-                obj = action;
-                console.log(obj.type);
-                console.log(action.data.old.idList);
-                //Need a way to access the 'results' array without having to run it through a method - can't save it as an object, array, or run it through a foreach loop...tried them all
-            });    
+                c.name = action.data.card.name;
+                c.createDate = new Date(1000*parseInt(action.data.card.id.substring(0,8),16)); //Creation date is encoded in card ID
+                c.actionDate = new Date(action.date);
+
+                if (action.data.card.idList != null)
+                    Trello.get('lists/' + action.data.card.idList + '/name', processName, showError);
+
+                return; //Also not ideal, need to only pull the top action for now, will sort through them all at some point later in time
+            });
         };
 
+        function processName (results) {
+            var temp = new Object();
+            temp = c;
+            temp.listName = results;
+            if (JSON.stringify(temp.listName).includes("Done")) { //Not perfect but it'll do for now
+                console.log(temp.name + " took " + ((temp.actionDate - temp.createDate) / (1000 * 60 * 60 *24)).toFixed(2) + " days to complete.");
+            }
+        }
 
-
+        //Simplifying assumptions:
+        // 1) Only items currently in a list that **contains** the word 'Done' will be counted (not all boards have this list and some boards contain more than just the word 'Done' in the list name)
+        // 2) Archived tasks are not counted
+        // 3) Cards moved to Done and then moved back to another list are not counted
+        // 4) The card creation date is used as the first date, not the Backlog entry date
+        // 5) Timespans are specified in days and rounded to the 0.00 decimal place
 
 
 
